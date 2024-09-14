@@ -112,8 +112,16 @@ def edit(request, entry):
             request,
             "encyclopedia/edit.html",
             {"form": form, "title": title},
-        )   
+        )
+
+    form = NewEntFm(request.POST)
+    if form.is_valid():
+        title = form.cleaned_data.get("title")
+        content = form.cleaned_data.get("content")
+
+        util.save_entry(title=title, content=content)
+        return redirect("wiki", title)
 
 
 def handler404(request, *args):
-    return render(request, "404.html", {})
+    return render(request, "Error.html", {})
